@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "condominiums",
+  "info": {
+    "singularName": "condominium",
+    "pluralName": "condominiums",
+    "displayName": "Condominium"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "project_title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "content": {
+      "type": "blocks",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

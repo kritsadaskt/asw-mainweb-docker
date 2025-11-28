@@ -1,0 +1,54 @@
+services:
+  # 1. Database (Postgres)
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: timesquare
+      POSTGRES_DB: strapidb
+    volumes:
+      - ./strapi-data:/var/lib/postgresql/data # Save data locally so you don't lose it on restart
+    ports:
+      - "5432:5432" # Optional: lets you connect to DB with a tool like DBeaver
+
+  # 2. Strapi Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapidb
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: timesquare
+      JWT_SECRET: alongrandomstringforsecurity
+      ADMIN_JWT_SECRET: anotherlongrandomstring
+      APP_KEYS: key1,key2,key3,key4
+      API_TOKEN_SALT: saltystring
+    volumes:
+      - ./backend:/app # <--- THE TUNNEL: Syncs your local folder to /app inside container
+      - /app/node_modules # <--- TRICK: Prevents local node_modules from overwriting container's
+    ports:
+      - "1337:1337"
+
+  # 3. Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      # In local docker, we can access Strapi via 'backend' hostname internally
+      INTERNAL_API_URL: http://backend:1337
+      # But the browser (Chrome) needs localhost
+      NEXT_PUBLIC_API_URL: http://localhost:1337
+    volumes:
+      - ./frontend:/app # <--- THE TUNNEL
+      - /app/node_modules
+    ports:
+      - "3000:3000"

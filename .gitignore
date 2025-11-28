@@ -1,0 +1,20 @@
+# Ignore heavy dependencies (Docker installs these fresh)
+node_modules/
+*/node_modules/
+
+# Ignore Environment Variables (Secrets)
+.env
+
+# Ignore Build files
+.next/
+build/
+.cache/
+dist/
+
+# Ignore Database Data (Because binary data breaks across computers)
+strapi-data/
+.tmp/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db

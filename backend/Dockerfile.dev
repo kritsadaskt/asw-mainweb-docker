@@ -1,0 +1,8 @@
+FROM node:20-alpine
+# Install system dependencies required by Strapi (Sharp image library)
+RUN apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev nasm bash vips-dev
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+# 'develop' command enables content type building and hot reload
+CMD ["npm", "run", "develop"]
